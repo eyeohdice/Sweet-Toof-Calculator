@@ -1,0 +1,46 @@
+{
+  "pricing": {
+    "base": {
+      "silver_925": 80,
+      "gold_10k": 150,
+      "gold_14k": 220,
+      "gold_18k": 350,
+      "rose_gold_14k": 220,
+      "white_gold_14k": 240
+    },
+    "finish": {
+      "polished": 0,
+      "matte": 20,
+      "diamond_dust": 50
+    },
+    "addon": {
+      "open_face": 40,
+      "fang": 60,
+      "engraving": 30,
+      "diamond_si": 150,
+      "diamond_vvs": 300
+    }
+  },
+  "labels": {
+    "metal": {
+      "silver_925": "Cobalt Chrome",
+      "gold_10k": "10k Yellow Gold",
+      "gold_14k": "14k Yellow Gold",
+      "gold_18k": "18k Yellow Gold",
+      "rose_gold_14k": "14k Rose Gold",
+      "white_gold_14k": "14k White Gold"
+    },
+    "finish": {
+      "polished": "High Polish",
+      "matte": "Matte / Satin",
+      "diamond_dust": "Diamond Dust"
+    },
+    "addon": {
+      "open_face": "Open Face / Window",
+      "fang": "Extended Fang",
+      "engraving": "Laser Engraving",
+      "diamond_si": "SI Diamond Set",
+      "diamond_vvs": "VVS Diamond Set"
+    }
+  }
+}
