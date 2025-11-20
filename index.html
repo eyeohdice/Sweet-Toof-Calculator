@@ -50,7 +50,7 @@
     <script type="text/babel" data-type="module" data-presets="react,typescript">
         import React, { useState, useEffect } from 'react';
         import { createRoot } from 'react-dom/client';
-        import { X, Copy, Instagram, Check, ArrowRight, Lock, Save, RotateCcw } from 'lucide-react';
+        import { X, Copy, Instagram, Check, ArrowRight, Lock, Save, RotateCcw, Download } from 'lucide-react';
 
         // --- TYPES ---
         type MetalType = 'gold_10k' | 'gold_14k' | 'gold_18k' | 'silver_925' | 'rose_gold_14k' | 'white_gold_14k';
@@ -142,7 +142,7 @@
           { id: 13, name: "Top R Canine", isTop: true, x: 230, y: 190, path: "m 223.40466,371.06355 c -7.52778,0.198 -16.48981,0.16848 -21.8246,6.43175 -6.42553,7.89758 -8.11765,18.31942 -10.70519,27.88066 -4.18034,17.95928 -7.28129,36.27698 -7.81276,54.73632 -0.0163,7.31963 1.80887,14.48708 3.21115,21.62728 3.15252,11.55889 7.16003,23.07106 13.41471,33.34393 6.40063,8.41216 14.86484,15.02913 23.38603,21.17216 3.70346,2.23261 7.5434,5.56379 12.13669,5.21643 8.82492,-3.25402 16.2283,-9.37186 23.99772,-14.51454 8.05807,-5.63859 17.66541,-11.24769 20.80284,-21.23106 2.92457,-9.64011 2.12342,-19.88377 2.88519,-29.81597 0.55682,-14.07545 1.33345,-28.23282 -0.64079,-42.24088 -1.26323,-11.62915 -3.93162,-23.85469 -12.12719,-32.70222 -7.92753,-8.47954 -14.63332,-18.62642 -25.2141,-24.15316 -6.21636,-3.42725 -13.08634,-6.2751 -20.33462,-5.75893 -0.39171,0.002 -0.78339,0.005 -1.17508,0.009 z" },
           { id: 12, name: "Top R Lateral", isTop: true, x: 330, y: 190, path: "m 336.48448,400.24796 c -11.56055,0.91631 -21.98618,8.13797 -28.00051,17.89771 -9.34812,14.9473 -12.88063,32.58568 -16.06692,49.68079 -1.63503,10.23618 -3.44753,20.49435 -4.08239,30.84719 1.3187,13.36098 4.99979,26.9699 13.08135,37.88663 4.93278,6.24515 12.29127,10.57677 20.2871,11.21885 10.92621,2.12163 22.10131,1.52909 33.16323,1.41878 6.5963,-0.39183 13.36574,-0.12735 19.8165,-1.66101 4.53422,-3.11745 6.94466,-8.52603 8.49544,-13.64245 2.0838,-12.18827 1.69164,-24.63992 1.98807,-36.96092 -0.13292,-10.38697 0.4758,-20.8238 -0.49733,-31.17757 -3.28737,-18.10467 -8.85111,-36.63872 -20.96648,-50.90719 -6.8026,-7.97124 -16.56664,-14.06029 -27.21806,-14.60081 z" },
           { id: 11, name: "Top R Central", isTop: true, x: 440, y: 190, path: "m 449.02454,374.76478 c -8.72576,-0.18475 -16.39176,4.8871 -22.49571,10.65171 -8.27296,7.44989 -14.54829,16.81569 -19.22775,26.86515 -6.74699,12.46528 -9.01169,26.6665 -11.57434,40.43295 -2.07131,13.57542 -4.30963,27.29622 -3.65289,41.07249 1.20607,14.66123 5.82248,28.78267 10.58755,42.6122 3.30499,8.70358 10.47559,16.85006 19.94636,18.63238 17.94014,1.95012 36.02754,2.22411 54.00184,3.56832 12.91391,0.22472 26.27713,-0.726 38.28494,-5.84829 8.09211,-3.72212 13.47399,-11.89589 14.8068,-20.58203 2.23803,-14.03434 -0.11689,-28.24853 -0.5568,-42.33204 -0.44312,-13.88728 -2.40085,-27.73683 -6.50793,-41.03281 -3.14524,-11.05104 -6.40961,-22.22539 -12.52805,-32.06803 -9.48944,-16.51 -23.69783,-30.98142 -41.78574,-37.752 -6.13258,-2.43931 -12.64534,-4.29648 -19.29828,-4.22 z" },
-          { id: 21, name: "Top L Central", isTop: true, x: 600, y: 190, path: "m 626.39595,376.25788 c -11.95766,0.39811 -23.46279,5.12409 -33.38755,11.59217 -13.33941,9.35967 -23.72395,22.47877 -30.91034,37.0288 -4.79774,9.46076 -7.22449,19.88754 -10.25926,29.99489 -5.11009,17.3327 -4.84321,35.54589 -6.15074,53.40272 -0.65187,12.08303 -1.80379,25.20353 4.34908,36.1795 4.13476,7.37782 12.30714,11.04808 20.21843,12.84765 13.27304,3.46552 27.12951,3.10637 40.66801,1.94311 14.12708,-0.94345 28.32804,-1.11264 42.39738,-2.73931 9.8022,-2.30381 17.30186,-10.64837 20.30651,-20.04247 4.44933,-12.38442 8.10008,-25.15139 9.94445,-38.19748 1.00423,-16.35226 -1.50243,-32.69179 -4.26033,-48.76641 -2.64262,-15.3111 -6.83109,-30.59896 -15.02098,-43.94871 -6.51402,-10.98219 -15.32654,-21.16946 -26.83755,-27.05319 -3.42464,-1.71607 -7.24666,-2.36754 -11.05104 -2.24127 z" },
+          { id: 21, name: "Top L Central", isTop: true, x: 600, y: 190, path: "m 626.39595,376.25788 c -11.56055,0.91631 -23.46279,5.12409 -33.38755,11.59217 -13.33941,9.35967 -23.72395,22.47877 -30.91034,37.0288 -4.79774,9.46076 -7.22449,19.88754 -10.25926,29.99489 -5.11009,17.3327 -4.84321,35.54589 -6.15074,53.40272 -0.65187,12.08303 -1.80379,25.20353 4.34908,36.1795 4.13476,7.37782 12.30714,11.04808 20.21843,12.84765 13.27304,3.46552 27.12951,3.10637 40.66801,1.94311 14.12708,-0.94345 28.32804,-1.11264 42.39738,-2.73931 9.8022,-2.30381 17.30186,-10.64837 20.30651,-20.04247 4.44933,-12.38442 8.10008,-25.15139 9.94445,-38.19748 1.00423,-16.35226 -1.50243,-32.69179 -4.26033,-48.76641 -2.64262,-15.3111 -6.83109,-30.59896 -15.02098,-43.94871 -6.51402,-10.98219 -15.32654,-21.16946 -26.83755,-27.05319 -3.42464,-1.71607 -7.24666,-2.36754 -11.05104 -2.24127 z" },
           { id: 22, name: "Top L Lateral", isTop: true, x: 720, y: 190, path: "m 738.53357,402.05559 c -14.4907,0.52517 -25.88023,11.907 -32.99409,23.60913 -7.64037,12.90467 -11.91237,27.61189 -14.43079,42.27521 0.26861,20.74461 -0.55917,41.54283 0.82495,62.25223 1.16119,6.90317 3.21908,14.99572 9.66837,18.78038 8.68282,2.00332 17.77293,1.15355 26.62578,1.56536 11.59101,-0.21937 23.69295,0.40317 34.7419,-3.6736 12.69785,-5.9706 18.8965,-20.01266 22.07233,-32.89696 4.28192,-15.43366 1.58816,-31.55096 0.089,-47.17584 -2.49523,-17.89422 -5.74582,-37.07465 -17.81909,-51.26953 -7.16827,-8.09097 -17.93369,-13.35725 -28.7787,-13.46638 z" },
           { id: 23, name: "Top L Canine", isTop: true, x: 830, y: 190, path: "m 848.50451,372.69542 c -8.53981,0.15105 -16.28223,4.754 -23.23861,9.30124 -7.90803,5.93121 -13.6284,14.22738 -20.25896,21.46176 -8.03625,9.03448 -10.14433,21.35712 -11.36965,32.97141 -1.5063,10.25771 -1.66387,20.61617 -0.88815,30.94071 0.82644,12.90045 -0.0161,26.06624 2.88985,38.74198 2.66945,10.52109 12.81795,16.16591 20.95877,22.08383 7.9826,4.9596 15.15513,11.78107 24.30524,14.53297 5.97493,-0.0502 10.67911,-4.72749 15.41717,-7.82442 10.00749,-7.28471 19.78105,-15.8313 24.56567,-27.56807 6.51255,-14.33551 10.76778,-29.75956 11.90046,-45.48277 -0.74061,-21.08444 -4.59734,-41.99128 -9.74204,-62.41541 -2.69121,-8.97211 -5.29811,-19.83752 -14.3514,-24.47539 -6.28335,-2.8987 -13.48209,-1.86772 -20.18835,-2.26784 z" },
           { id: 24, name: "Top L 1st Premolar", isTop: true, x: 920, y: 190, path: "m 951.70651,389.28452 c -9.99574,1.13017 -17.97323,8.26006 -25.2985,14.57787 -9.93936,8.6268 -17.4961,19.73912 -22.08218,32.05984 -3.14593,7.59457 -5.38318,15.61504 -5.19789,23.90246 -0.43049,14.33213 -1.79323,28.72994 -0.68988,43.05014 0.6807,5.2174 3.23299,9.99555 7.3794,13.28222 8.55674,7.93483 18.37866,14.99805 29.3501,19.02211 9.49258,-7.36516 15.59953,-18.12593 22.8011,-27.56888 6.1943,-9.43466 10.09011,-20.4512 10.22761,-31.80377 0.66367,-13.6301 2.7003,-27.39752 0.92856,-41.00908 -1.79493,-4.87237 -2.7498,-9.88672 -2.9191,-15.08204 -0.65534,-7.85649 -0.79918,-16.34498 -6.00351,-22.80863 -2.32015,-2.66317 -4.16997,-6.67954 -7.79598,-7.62669 -0.23308,-0.009 -0.46683,-0.0116 -0.69973,0.005 z" },
@@ -503,6 +503,19 @@
           const updatePrice = (category, key, value) => setPricing(prev => ({ ...prev, [category]: { ...prev[category], [key]: parseFloat(value) || 0 } }));
           const updateLabel = (category, key, value) => setLabels(prev => ({ ...prev, [category]: { ...prev[category], [key]: value } }));
 
+          const handleDownloadConfig = () => {
+              const configData = JSON.stringify({ pricing, labels }, null, 2);
+              const blob = new Blob([configData], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'config.json';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+          };
+
           if (!isOpen) return null;
           return (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in duration-200">
@@ -523,6 +536,15 @@
                 ) : (
                   <div className="flex flex-col h-full overflow-hidden">
                      <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                        <div className="bg-neutral-900 p-4 border-l-4 border-blue-500 mb-6">
+                            <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-2">How to update for everyone:</h4>
+                            <ol className="list-decimal list-inside text-neutral-400 text-xs space-y-1">
+                                <li>Make your changes below.</li>
+                                <li>Click <strong>"Download Config for GitHub"</strong>.</li>
+                                <li>Upload the downloaded <code>config.json</code> file to your GitHub repository (in the same folder as index.html).</li>
+                                <li>GitHub Pages will update automatically in a few minutes.</li>
+                            </ol>
+                        </div>
                         {['base', 'finish', 'addon'].map((cat) => (
                           <section key={cat}>
                             <h3 className="text-white font-bold uppercase tracking-widest mb-4 border-b border-neutral-800 pb-2">{cat === 'base' ? 'Materials' : cat === 'finish' ? 'Finishes' : 'Add-ons'}</h3>
@@ -539,7 +561,10 @@
                      </div>
                      <div className="p-6 border-t border-neutral-800 flex justify-between items-center bg-black">
                         <button onClick={handleResetDefaults} className="flex items-center gap-2 text-red-500 text-xs uppercase font-bold tracking-widest hover:text-red-400"><RotateCcw className="w-4 h-4" />Reset Defaults</button>
-                        <button onClick={handleSave} className="flex items-center gap-2 bg-white text-black px-6 py-3 uppercase font-bold tracking-widest hover:bg-neutral-200 transition-colors"><Save className="w-4 h-4" />Save Changes</button>
+                        <div className="flex gap-3">
+                            <button onClick={handleDownloadConfig} className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 uppercase font-bold tracking-widest hover:bg-blue-500 transition-colors"><Download className="w-4 h-4" /> Download Config for GitHub</button>
+                            <button onClick={handleSave} className="flex items-center gap-2 bg-white text-black px-6 py-3 uppercase font-bold tracking-widest hover:bg-neutral-200 transition-colors"><Save className="w-4 h-4" />Save Local</button>
+                        </div>
                      </div>
                   </div>
                 )}
@@ -553,23 +578,56 @@
           const [selections, setSelections] = useState({});
           const [adminOpen, setAdminOpen] = useState(false);
           
-          const [pricing, setPricing] = useState(() => {
-            try { const saved = localStorage.getItem('st_pricing'); return saved ? JSON.parse(saved) : PRICING; } 
-            catch (e) { return PRICING; }
-          });
+          // Initialize state with defaults first
+          const [pricing, setPricing] = useState(PRICING);
+          const [labels, setLabels] = useState({ metal: METAL_LABELS, finish: FINISH_LABELS, addon: ADDON_LABELS });
+          const [configLoaded, setConfigLoaded] = useState(false);
 
-          const [labels, setLabels] = useState(() => {
-            try { const saved = localStorage.getItem('st_labels'); return saved ? JSON.parse(saved) : { metal: METAL_LABELS, finish: FINISH_LABELS, addon: ADDON_LABELS }; } 
-            catch (e) { return { metal: METAL_LABELS, finish: FINISH_LABELS, addon: ADDON_LABELS }; }
-          });
+          // 1. Try to fetch config.json (from GitHub)
+          useEffect(() => {
+             fetch('./config.json')
+                .then(res => {
+                    if (!res.ok) throw new Error("No external config found");
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.pricing) setPricing(data.pricing);
+                    if (data.labels) setLabels(data.labels);
+                    setConfigLoaded(true);
+                })
+                .catch(err => {
+                    // 2. If no file, check localStorage (for local testing)
+                    console.log("Using local/default config");
+                    try {
+                        const savedPricing = localStorage.getItem('st_pricing');
+                        if (savedPricing) setPricing(JSON.parse(savedPricing));
+                        const savedLabels = localStorage.getItem('st_labels');
+                        if (savedLabels) setLabels(JSON.parse(savedLabels));
+                    } catch (e) {}
+                    setConfigLoaded(true);
+                });
+          }, []);
 
-          useEffect(() => { localStorage.setItem('st_pricing', JSON.stringify(pricing)); }, [pricing]);
-          useEffect(() => { localStorage.setItem('st_labels', JSON.stringify(labels)); }, [labels]);
+          // 3. Save to localStorage whenever it changes (so admin changes persist locally while editing)
+          useEffect(() => {
+            if (configLoaded) {
+                localStorage.setItem('st_pricing', JSON.stringify(pricing));
+            }
+          }, [pricing, configLoaded]);
+
+          useEffect(() => {
+            if (configLoaded) {
+                localStorage.setItem('st_labels', JSON.stringify(labels));
+            }
+          }, [labels, configLoaded]);
 
           const handleUpdateSelection = (id, updates) => {
             setSelections(prev => ({ ...prev, [id]: { ...(prev[id] || { metal: 'gold_10k', finish: 'polished', addons: [], engravingText: '' }), ...updates } }));
           };
           const handleRemoveSelection = (id) => { setSelections(prev => { const n = { ...prev }; delete n[id]; return n; }); setSelectedToothId(null); };
+
+          // Prevent flash of default content before config loads? optional.
+          if (!configLoaded) return null; 
 
           return (
             <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-white selection:text-black">
