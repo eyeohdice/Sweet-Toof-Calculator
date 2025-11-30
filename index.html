@@ -650,10 +650,6 @@
             setLabels(newLabels);
           };
 
-          const handleToothClick = (id) => {
-            setSelectedToothId(id === selectedToothId ? null : id);
-          };
-
           const handleUpdateSelection = (id, updates) => {
             setSelections(prev => {
                 const currentSelection = prev[id] || { metal: 'cobalt_chrome', finish: 'polished', addons: [], engravingText: '' };
@@ -662,6 +658,19 @@
                     [id]: { ...currentSelection, ...updates }
                 };
             });
+          };
+
+          const handleToothClick = (id) => {
+            if (id === selectedToothId) {
+                setSelectedToothId(null);
+            } else {
+                setSelectedToothId(id);
+                // Fix: Automatically initialize selection to default (Cobalt Chrome) 
+                // so price is calculated immediately and visual style is consistent.
+                if (!selections[id]) {
+                    handleUpdateSelection(id, { metal: 'cobalt_chrome', finish: 'polished', addons: [], engravingText: '' });
+                }
+            }
           };
 
           const handleRemoveSelection = (id) => {
