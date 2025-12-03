@@ -605,8 +605,37 @@
           const [labels, setLabels] = useState(DEFAULT_LABELS);
           const [configLoaded, setConfigLoaded] = useState(false);
 
+          // Helper to deeply merge a partial config into defaults
+          // This ensures that if the loaded config is old (missing keys like cobalt_chrome),
+          // the default value for that key is preserved instead of being lost.
+          const mergeConfig = (defaults, loaded) => {
+             if (!loaded) return defaults;
+             const result = { ...defaults };
+             
+             // Iterate through 'base', 'finish', 'addon'
+             ['base', 'finish', 'addon'].forEach(cat => {
+                 if (loaded[cat]) {
+                     // Merge loaded category into default category
+                     result[cat] = { ...defaults[cat], ...loaded[cat] };
+                 }
+             });
+             
+             // Also preserve any extra keys if they exist in loaded but not defaults (though rare for this structure)
+             return result;
+          };
+
+          const mergeLabels = (defaults, loaded) => {
+             if (!loaded) return defaults;
+             const result = { ...defaults };
+             ['metal', 'finish', 'addon'].forEach(cat => {
+                 if (loaded[cat]) {
+                     result[cat] = { ...defaults[cat], ...loaded[cat] };
+                 }
+             });
+             return result;
+          };
+
           useEffect(() => {
-             // Try to load external config, fall back to local storage, then default
              // Added timestamp to prevent caching issues on deployment
              fetch('./config.json?t=' + new Date().getTime())
                 .then(res => {
@@ -614,18 +643,26 @@
                     return res.json();
                 })
                 .then(data => {
-                    if (data.pricing) setPricing(data.pricing);
-                    if (data.labels) setLabels(data.labels);
+                    // Merge loaded config with defaults to ensure robustness against old config files
+                    if (data.pricing) setPricing(prev => mergeConfig(DEFAULT_PRICING, data.pricing));
+                    if (data.labels) setLabels(prev => mergeLabels(DEFAULT_LABELS, data.labels));
                     setConfigLoaded(true);
                 })
                 .catch(err => {
                     console.log("Using local/default config");
                     try {
-                        // NOTE: Updated key to v3 to force fresh load if old data exists
-                        const savedPricing = localStorage.getItem('st_pricing_v3');
-                        if (savedPricing) setPricing(JSON.parse(savedPricing));
-                        const savedLabels = localStorage.getItem('st_labels_v3');
-                        if (savedLabels) setLabels(JSON.parse(savedLabels));
+                        // Updated to v4 to clear stale cache
+                        const savedPricing = localStorage.getItem('st_pricing_v4');
+                        if (savedPricing) {
+                            const parsed = JSON.parse(savedPricing);
+                            setPricing(mergeConfig(DEFAULT_PRICING, parsed));
+                        }
+                        
+                        const savedLabels = localStorage.getItem('st_labels_v4');
+                        if (savedLabels) {
+                            const parsed = JSON.parse(savedLabels);
+                            setLabels(mergeLabels(DEFAULT_LABELS, parsed));
+                        }
                     } catch (e) {
                       console.error("Error loading local storage config", e);
                     }
@@ -635,13 +672,13 @@
 
           useEffect(() => {
             if (configLoaded) {
-                localStorage.setItem('st_pricing_v3', JSON.stringify(pricing));
+                localStorage.setItem('st_pricing_v4', JSON.stringify(pricing));
             }
           }, [pricing, configLoaded]);
 
           useEffect(() => {
             if (configLoaded) {
-                localStorage.setItem('st_labels_v3', JSON.stringify(labels));
+                localStorage.setItem('st_labels_v4', JSON.stringify(labels));
             }
           }, [labels, configLoaded]);
 
@@ -665,8 +702,6 @@
                 setSelectedToothId(null);
             } else {
                 setSelectedToothId(id);
-                // Automatically initialize selection to default (Cobalt Chrome) 
-                // so price is calculated immediately and visual style is consistent.
                 if (!selections[id]) {
                     handleUpdateSelection(id, { metal: 'cobalt_chrome', finish: 'polished', addons: [], engravingText: '' });
                 }
