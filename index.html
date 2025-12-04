@@ -486,9 +486,9 @@
           const handleDownload = async () => {
               setIsGenerating(true);
               
-              // Wait a tick to ensure UI is ready (though typically not needed for click handler)
-              await new Promise(r => setTimeout(r, 100));
-
+              // Ensure fonts are loaded before drawing text
+              await document.fonts.ready;
+              
               const canvas = document.createElement('canvas');
               canvas.width = 1080;
               canvas.height = 1920;
@@ -514,27 +514,23 @@
                   const serializer = new XMLSerializer();
                   const clone = svgElement.cloneNode(true);
                   
-                  // Fix dimensions for the snapshot
+                  // Explicitly set namespace and dimensions for reliable rendering
+                  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
                   clone.setAttribute("width", "1080");
                   clone.setAttribute("height", "500");
-                  // Reset styles that might rely on CSS classes not present in the blob context
-                  clone.style.width = "1080px";
-                  clone.style.height = "500px";
                   
-                  let svgString = serializer.serializeToString(clone);
+                  // Clear styles/classes that might rely on external CSS
+                  clone.removeAttribute("class");
+                  clone.style.cssText = "";
                   
-                  // Namespace check
-                  if (!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
-                      svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-                  }
-
-                  const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
-                  const url = URL.createObjectURL(svgBlob);
+                  const svgString = serializer.serializeToString(clone);
+                  const encodedSvg = encodeURIComponent(svgString);
+                  const imgSrc = `data:image/svg+xml;charset=utf-8,${encodedSvg}`;
                   
                   const img = new Image();
                   img.onload = () => {
                       // Draw image centered
-                      const targetWidth = 950; // Slightly wider to fill space
+                      const targetWidth = 950; 
                       const targetHeight = (500/1080) * targetWidth; 
                       
                       ctx.drawImage(img, (1080-targetWidth)/2, 600, targetWidth, targetHeight);
@@ -563,7 +559,7 @@
                       const uniqueMetals = [...new Set(Object.values(selections).map(s => labels.metal?.[s.metal] || s.metal))];
                       if (uniqueMetals.length > 0) {
                           ctx.fillText(uniqueMetals.join(', '), 540, detailsY);
-                          detailsY += 80; // More space
+                          detailsY += 80;
                       }
 
                       // Addons
@@ -581,7 +577,7 @@
                       
                       const addonKeys = Object.keys(addonMap);
                       if (addonKeys.length > 0) {
-                          ctx.fillStyle = '#ffffff'; // Highlight header
+                          ctx.fillStyle = '#ffffff'; 
                           ctx.font = 'bold 24px Inter, sans-serif';
                           ctx.fillText("INCLUDED UPGRADES", 540, detailsY);
                           detailsY += 40;
@@ -592,7 +588,6 @@
                           addonKeys.forEach(addonName => {
                              const teethList = addonMap[addonName].join(', ');
                              let text = `${addonName}`;
-                             // If list is too long, just say "x teeth"
                              if (teethList.length > 40) {
                                  text += ` (${addonMap[addonName].length} teeth)`;
                              } else {
@@ -609,19 +604,20 @@
                       ctx.fillStyle = '#333333';
                       ctx.fillText('@Sweet.Toof.Cy', 540, 1820);
 
-                      URL.revokeObjectURL(url);
-                      
+                      // Download
                       const link = document.createElement('a');
                       link.download = `sweet-toof-design-${Date.now()}.png`;
                       link.href = canvas.toDataURL('image/png');
                       link.click();
                       setIsGenerating(false);
                   };
+                  
                   img.onerror = (e) => {
                       console.error("Error loading SVG image", e);
                       setIsGenerating(false);
                   };
-                  img.src = url;
+                  
+                  img.src = imgSrc;
               } else {
                   console.error("SVG Element not found");
                   setIsGenerating(false);
