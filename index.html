@@ -521,7 +521,9 @@
               try {
                   const logoImg = await loadImage('./sweet-toof-logo-white.png');
                   if (logoImg) {
-                      const logoWidth = 200;
+                      // --- CUSTOMIZATION: ADJUST LOGO SIZE HERE ---
+                      // Change '350' to any number to scale the logo (Canvas width is 1080px)
+                      const logoWidth = 350; 
                       const logoHeight = (logoImg.height / logoImg.width) * logoWidth;
                       ctx.drawImage(logoImg, 540 - logoWidth/2, 230, logoWidth, logoHeight);
                   }
@@ -768,67 +770,38 @@
           const [labels, setLabels] = useState(DEFAULT_LABELS);
           const [configLoaded, setConfigLoaded] = useState(false);
 
-          // Helper to deeply merge a partial config into defaults
-          // This ensures that if the loaded config is old (missing keys like cobalt_chrome),
-          // the default value for that key is preserved instead of being lost.
-          const mergeConfig = (defaults, loaded) => {
-             if (!loaded) return defaults;
-             const result = { ...defaults };
-             
-             // Iterate through 'base', 'finish', 'addon'
-             ['base', 'finish', 'addon'].forEach(cat => {
-                 if (loaded[cat]) {
-                     // Merge loaded category into default category
-                     result[cat] = { ...defaults[cat], ...loaded[cat] };
-                 }
-             });
-             
-             // Also preserve any extra keys if they exist in loaded but not defaults (though rare for this structure)
-             return result;
-          };
-
-          const mergeLabels = (defaults, loaded) => {
-             if (!loaded) return defaults;
-             const result = { ...defaults };
-             ['metal', 'finish', 'addon'].forEach(cat => {
-                 if (loaded[cat]) {
-                     result[cat] = { ...defaults[cat], ...loaded[cat] };
-                 }
-             });
-             return result;
-          };
-
           useEffect(() => {
-             // Added timestamp to prevent caching issues on deployment
-             fetch('./config.json?t=' + new Date().getTime())
+             fetch(`./config.json?t=${Date.now()}`)
                 .then(res => {
                     if (!res.ok) throw new Error("No external config found");
                     return res.json();
                 })
                 .then(data => {
-                    // Merge loaded config with defaults to ensure robustness against old config files
-                    if (data.pricing) setPricing(prev => mergeConfig(DEFAULT_PRICING, data.pricing));
-                    if (data.labels) setLabels(prev => mergeLabels(DEFAULT_LABELS, data.labels));
+                    // Merge logic
+                    setPricing(prev => ({
+                        ...prev,
+                        ...data.pricing,
+                        base: { ...prev.base, ...(data.pricing?.base || {}) },
+                        finish: { ...prev.finish, ...(data.pricing?.finish || {}) },
+                        addon: { ...prev.addon, ...(data.pricing?.addon || {}) }
+                    }));
+                    setLabels(prev => ({
+                        ...prev,
+                        ...data.labels,
+                        metal: { ...prev.metal, ...(data.labels?.metal || {}) },
+                        finish: { ...prev.finish, ...(data.labels?.finish || {}) },
+                        addon: { ...prev.addon, ...(data.labels?.addon || {}) }
+                    }));
                     setConfigLoaded(true);
                 })
                 .catch(err => {
                     console.log("Using local/default config");
                     try {
-                        // Updated to v4 to clear stale cache
                         const savedPricing = localStorage.getItem('st_pricing_v4');
-                        if (savedPricing) {
-                            const parsed = JSON.parse(savedPricing);
-                            setPricing(mergeConfig(DEFAULT_PRICING, parsed));
-                        }
-                        
+                        if (savedPricing) setPricing(JSON.parse(savedPricing));
                         const savedLabels = localStorage.getItem('st_labels_v4');
-                        if (savedLabels) {
-                            const parsed = JSON.parse(savedLabels);
-                            setLabels(mergeLabels(DEFAULT_LABELS, parsed));
-                        }
-                    } catch (e) {
-                      console.error("Error loading local storage config", e);
-                    }
+                        if (savedLabels) setLabels(JSON.parse(savedLabels));
+                    } catch (e) {}
                     setConfigLoaded(true);
                 });
           }, []);
@@ -850,6 +823,21 @@
             setLabels(newLabels);
           };
 
+          const handleToothClick = (id) => {
+            if (selectedToothId === id) {
+                setSelectedToothId(null);
+            } else {
+                setSelectedToothId(id);
+                // Auto-initialize if empty
+                if (!selections[id]) {
+                    setSelections(prev => ({
+                        ...prev,
+                        [id]: { metal: 'cobalt_chrome', finish: 'polished', addons: [] }
+                    }));
+                }
+            }
+          };
+
           const handleUpdateSelection = (id, updates) => {
             setSelections(prev => {
                 const currentSelection = prev[id] || { metal: 'cobalt_chrome', finish: 'polished', addons: [], engravingText: '' };
@@ -858,17 +846,6 @@
                     [id]: { ...currentSelection, ...updates }
                 };
             });
-          };
-
-          const handleToothClick = (id) => {
-            if (id === selectedToothId) {
-                setSelectedToothId(null);
-            } else {
-                setSelectedToothId(id);
-                if (!selections[id]) {
-                    handleUpdateSelection(id, { metal: 'cobalt_chrome', finish: 'polished', addons: [], engravingText: '' });
-                }
-            }
           };
 
           const handleRemoveSelection = (id) => {
