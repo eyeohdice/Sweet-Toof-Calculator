@@ -246,7 +246,7 @@
         const TeethDisplay = ({ selectedToothId, selections, onToothClick }) => {
           return (
             <div className="w-full mx-auto relative flex-1 flex items-center justify-center">
-              <svg viewBox="0 0 1080 500" className="w-full h-full drop-shadow-2xl">
+              <svg id="visualizer-svg" viewBox="0 0 1080 500" className="w-full h-full drop-shadow-2xl" style={{overflow: 'visible'}}>
                 <defs>
                   <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#BF953F" />
@@ -485,6 +485,10 @@
 
           const handleDownload = async () => {
               setIsGenerating(true);
+              
+              // Wait a tick to ensure UI is ready (though typically not needed for click handler)
+              await new Promise(r => setTimeout(r, 100));
+
               const canvas = document.createElement('canvas');
               canvas.width = 1080;
               canvas.height = 1920;
@@ -505,19 +509,23 @@
               ctx.fillText('MADE-TO-FIT GRILLZ', 540, 260);
 
               // 2. Teeth Image
-              const svgElement = document.querySelector('svg');
+              const svgElement = document.getElementById('visualizer-svg');
               if (svgElement) {
                   const serializer = new XMLSerializer();
-                  let svgString = serializer.serializeToString(svgElement);
+                  const clone = svgElement.cloneNode(true);
                   
-                  // Ensure namespace is correct for standalone image
+                  // Fix dimensions for the snapshot
+                  clone.setAttribute("width", "1080");
+                  clone.setAttribute("height", "500");
+                  // Reset styles that might rely on CSS classes not present in the blob context
+                  clone.style.width = "1080px";
+                  clone.style.height = "500px";
+                  
+                  let svgString = serializer.serializeToString(clone);
+                  
+                  // Namespace check
                   if (!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
                       svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-                  }
-                  
-                  // Explicitly set width and height to avoid default small size rendering
-                  if (!svgString.match(/width="[^"]+"/) || !svgString.match(/height="[^"]+"/)) {
-                     svgString = svgString.replace(/^<svg/, '<svg width="1080" height="500"');
                   }
 
                   const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
@@ -525,9 +533,9 @@
                   
                   const img = new Image();
                   img.onload = () => {
-                      // Draw image centered in the middle section
-                      const targetWidth = 900;
-                      const targetHeight = (500/1080) * 900; 
+                      // Draw image centered
+                      const targetWidth = 950; // Slightly wider to fill space
+                      const targetHeight = (500/1080) * targetWidth; 
                       
                       ctx.drawImage(img, (1080-targetWidth)/2, 600, targetWidth, targetHeight);
                       
@@ -542,22 +550,23 @@
 
                       // 4. Details Section
                       let detailsY = 1450;
-                      ctx.fillStyle = '#aaaaaa';
                       
-                      // 4a. Summary of Item Count
+                      // Item Count
                       ctx.font = '40px Inter, sans-serif';
+                      ctx.fillStyle = '#aaaaaa'; 
                       ctx.fillText(`${Object.keys(selections).length} Item(s) Configured`, 540, detailsY);
-                      detailsY += 60;
+                      detailsY += 70;
                       
-                      // 4b. Materials Summary
+                      // Materials
+                      ctx.font = '30px Inter, sans-serif';
+                      ctx.fillStyle = '#888888';
                       const uniqueMetals = [...new Set(Object.values(selections).map(s => labels.metal?.[s.metal] || s.metal))];
                       if (uniqueMetals.length > 0) {
                           ctx.fillText(uniqueMetals.join(', '), 540, detailsY);
-                          detailsY += 60;
+                          detailsY += 80; // More space
                       }
 
-                      // 4c. Addons Breakdown
-                      // Collect addons by type: { "Diamond Set": ["Top R Canine", "Top L Canine"], ... }
+                      // Addons
                       const addonMap = {};
                       Object.entries(selections).forEach(([id, sel]) => {
                           if (sel.addons && sel.addons.length > 0) {
@@ -570,47 +579,51 @@
                           }
                       });
                       
-                      // Draw specific addons if they exist
                       const addonKeys = Object.keys(addonMap);
                       if (addonKeys.length > 0) {
-                          detailsY += 20; // spacer
-                          ctx.font = 'bold 30px Inter, sans-serif';
-                          ctx.fillStyle = '#666666';
-                          ctx.fillText("ADD-ONS INCLUDED", 540, detailsY);
-                          detailsY += 50;
+                          ctx.fillStyle = '#ffffff'; // Highlight header
+                          ctx.font = 'bold 24px Inter, sans-serif';
+                          ctx.fillText("INCLUDED UPGRADES", 540, detailsY);
+                          detailsY += 40;
                           
-                          ctx.font = '30px Inter, sans-serif';
-                          ctx.fillStyle = '#bbbbbb';
+                          ctx.font = '24px Inter, sans-serif';
+                          ctx.fillStyle = '#888888';
                           
                           addonKeys.forEach(addonName => {
                              const teethList = addonMap[addonName].join(', ');
-                             // Simple truncation if too long
-                             const text = `${addonName} • ${teethList}`;
-                             if (text.length > 60) {
-                                 ctx.fillText(text.substring(0, 57) + '...', 540, detailsY);
+                             let text = `${addonName}`;
+                             // If list is too long, just say "x teeth"
+                             if (teethList.length > 40) {
+                                 text += ` (${addonMap[addonName].length} teeth)`;
                              } else {
-                                 ctx.fillText(text, 540, detailsY);
+                                 text += ` (${teethList})`;
                              }
-                             detailsY += 40;
+                             
+                             ctx.fillText(text, 540, detailsY);
+                             detailsY += 35;
                           });
                       }
                       
-                      // 5. Footer
-                      ctx.font = '30px monospace';
+                      // Footer
+                      ctx.font = 'bold 24px Inter, sans-serif';
                       ctx.fillStyle = '#333333';
-                      ctx.fillText('@Sweet.Toof.Cy', 540, 1800);
+                      ctx.fillText('@Sweet.Toof.Cy', 540, 1820);
 
                       URL.revokeObjectURL(url);
                       
-                      // Trigger Download
                       const link = document.createElement('a');
                       link.download = `sweet-toof-design-${Date.now()}.png`;
                       link.href = canvas.toDataURL('image/png');
                       link.click();
                       setIsGenerating(false);
                   };
+                  img.onerror = (e) => {
+                      console.error("Error loading SVG image", e);
+                      setIsGenerating(false);
+                  };
                   img.src = url;
               } else {
+                  console.error("SVG Element not found");
                   setIsGenerating(false);
               }
           };
