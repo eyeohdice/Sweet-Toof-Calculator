@@ -2,12 +2,12 @@
   "pricing": {
     "base": {
       "cobalt_chrome": 80,
-      "gold_10k": 160,
+      "gold_10k": 150,
       "gold_14k": 220,
       "gold_18k": 350,
       "rose_gold_14k": 220,
-      "white_gold_14k": 240,
-      "silver_925": 80
+      "white_gold_14k": 260,
+      "silver_925": 110
     },
     "finish": {
       "polished": 0,
@@ -24,17 +24,17 @@
   },
   "labels": {
     "metal": {
-      "cobalt_chrome": "Cobalt Chrome (Silver)",
+      "cobalt_chrome": "Cobalt Chrome",
       "gold_10k": "9k Yellow Gold",
       "gold_14k": "14k Yellow Gold",
       "gold_18k": "18k Yellow Gold",
       "rose_gold_14k": "14k Rose Gold",
       "white_gold_14k": "14k White Gold",
-      "silver_925": "Cobalt Chrome (Silver)"
+      "silver_925": "Sterling Silver"
     },
     "finish": {
       "polished": "High Polish",
-      "matte": "Matte / Satin",
+      "matte": "Matte",
       "diamond_dust": "Diamond Dust"
     },
     "addon": {
