@@ -16,7 +16,7 @@
     },
     "addon": {
       "open_face": 40,
-      "fang": 60,
+      "fang": 40,
       "engraving": 30,
       "diamond_si": 150,
       "diamond_vvs": 300
@@ -24,13 +24,13 @@
   },
   "labels": {
     "metal": {
-      "cobalt_chrome": "Cobalt Chrome",
+      "cobalt_chrome": "Cobalt Chrome (Silver)",
       "gold_10k": "9k Yellow Gold",
       "gold_14k": "14k Yellow Gold",
       "gold_18k": "18k Yellow Gold",
       "rose_gold_14k": "14k Rose Gold",
       "white_gold_14k": "14k White Gold",
-      "silver_925": "Cobalt Chrome"
+      "silver_925": "Cobalt Chrome (Silver)"
     },
     "finish": {
       "polished": "High Polish",
@@ -39,7 +39,7 @@
     },
     "addon": {
       "open_face": "Open Face / Window",
-      "fang": "Extended Fang",
+      "fang": "3D Design",
       "engraving": "Laser Engraving",
       "diamond_si": "SI Diamond Set",
       "diamond_vvs": "VVS Diamond Set"
